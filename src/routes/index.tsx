@@ -72,7 +72,7 @@ function Index() {
         <div className="mx-auto w-full max-w-7xl px-5 py-24">
           <div className="max-w-3xl animate-rise">
             <Eyebrow>Academia em Varginha-MG</Eyebrow>
-            <h1 className="font-display text-6xl leading-[0.95] sm:text-7xl lg:text-8xl">Treine com propósito.<br /><span className="text-primary">Evolua todos os dias.</span></h1>
+            <h1 className="font-display text-6xl leading-[0.95] sm:text-7xl lg:text-8xl">Treine com propósito.<br /><span className="text-brasil">Evolua todos os dias.</span></h1>
             <p className="mt-6 max-w-xl text-lg text-muted-foreground">Um lugar para você se sentir em casa, ser acompanhado de perto e perceber sua evolução — no seu ritmo, com quem entende de treino.</p>
             <div className="mt-10 flex flex-col gap-4 sm:flex-row">
               <Btn href={WA}><MessageCircle className="h-5 w-5" />Quero fazer uma aula experimental</Btn>
@@ -83,7 +83,8 @@ function Index() {
       </section>
 
       {/* TRUST */}
-      <section className="border-y border-border bg-primary text-primary-foreground">
+      <div className="overflow-hidden border-y border-border bg-graphite py-4"><div className="animate-marquee flex w-max gap-10 font-display text-2xl text-foreground/15">{Array.from({length:2}).flatMap((_,k)=>["Força","Disciplina","Família","Combate","Evolução","Varginha","Respeito","Superação"].map(w=><span key={k+w}>{w} <span className="text-gold">✦</span></span>))}</div></div>
+      <section className="bg-brasil text-primary-foreground">
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-5 py-8 sm:grid-cols-3">
           <div className="flex items-center gap-3"><div className="flex">{[0,1,2,3,4].map(i => <Star key={i} className="h-5 w-5 fill-current" />)}</div><span className="font-display text-3xl">4,5/5</span></div>
           <div className="flex items-center gap-3"><Users className="h-6 w-6" /><span className="font-bold">Mais de 200 avaliações no perfil público</span></div>
@@ -150,15 +151,15 @@ function Index() {
         <div className="mx-auto grid max-w-7xl gap-14 px-5 lg:grid-cols-2 lg:items-center">
           <div className="relative">
             <img src={fight} alt="Treino de boxe no saco de pancadas (imagem ilustrativa)" loading="lazy" width={1200} height={1200} className="aspect-square w-full rounded-3xl object-cover" />
-            <div className="absolute -bottom-6 -right-4 rounded-2xl bg-primary px-6 py-4 text-primary-foreground sm:-right-6">
+            <div className="absolute -bottom-6 -right-4 bg-brasil rounded-2xl px-6 py-4 text-primary-foreground sm:-right-6">
               <p className="font-display text-2xl">DNA de combate</p>
             </div>
           </div>
           <div>
             <Eyebrow>Equipe Ribas</Eyebrow>
-            <h2 className="font-display text-5xl leading-none sm:text-6xl">Uma família com <span className="text-primary">história nos esportes de combate</span></h2>
+            <h2 className="font-display text-5xl leading-none sm:text-6xl">Uma família com <span className="text-brasil">história nos esportes de combate</span></h2>
             <p className="mt-6 text-lg text-muted-foreground">A equipe Ribas carrega uma trajetória ligada às lutas — disciplina, respeito e superação que fazem parte da cultura da casa.</p>
-            <p className="mt-4 text-lg text-muted-foreground">O sobrenome também é compartilhado com <strong className="text-foreground">Amanda Ribas</strong>, lutadora de MMA natural de Varginha, cuja história tem raízes nessa mesma família do esporte. Uma inspiração para quem treina aqui.</p>
+            <p className="mt-4 text-lg text-muted-foreground"><strong className="text-foreground">Amanda Ribas</strong>, lutadora do UFC nascida em Varginha e faixa-preta em jiu-jítsu e judô, começou nos tatames com o pai, o professor Marcelo Ribas. Uma história de dedicação, bandeira verde e amarela e muito orgulho mineiro que inspira quem treina aqui.</p>
             <p className="mt-6 border-l-2 border-primary pl-4 text-xs text-muted-foreground">Menção de caráter histórico e inspiracional. Não indica patrocínio, endosso ou presença atual da atleta na academia.</p>
           </div>
         </div>
@@ -235,7 +236,7 @@ function Index() {
 
       {/* CTA */}
       <section className="relative overflow-hidden py-32">
-        <div className="absolute inset-0 -z-10 bg-primary" />
+        <div className="bg-brasil absolute inset-0 -z-10" />
         <div className="mx-auto max-w-4xl px-5 text-center text-primary-foreground">
           <h2 className="font-display text-5xl leading-none sm:text-7xl">Sua evolução começa com uma aula.</h2>
           <p className="mx-auto mt-6 max-w-xl text-lg font-medium">Venha conhecer a Ribas Family. Fale com a gente e agende sua aula experimental.</p>
