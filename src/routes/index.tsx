@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Dumbbell, UserCheck, Swords, Activity, Star, MapPin, Clock, MessageCircle, Menu, X, Heart, TrendingUp, Users, Quote } from "lucide-react";
+import { Dumbbell, UserCheck, Swords, Activity, Star, MapPin, Clock, MessageCircle, Menu, X, Heart, TrendingUp, Users, Quote, BadgePercent, CalendarDays } from "lucide-react";
 import { useState, useEffect } from "react";
 import hero from "@/assets/hero-gym.jpg";
 import fight from "@/assets/fight.jpg";
@@ -24,7 +24,7 @@ export const Route = createFileRoute("/")({
 });
 
 const nav = [
-  ["Sobre", "#sobre"], ["Modalidades", "#modalidades"], ["Lutas", "#lutas"], ["Galeria", "#galeria"], ["Horários", "#horarios"], ["Localização", "#localizacao"],
+  ["Sobre", "#sobre"], ["Modalidades", "#modalidades"], ["Planos e aulas", "#planos-aulas"], ["Lutas", "#lutas"], ["Galeria", "#galeria"], ["Horários", "#horarios"], ["Localização", "#localizacao"],
 ];
 
 function Btn({ href, children, ghost }: { href: string; children: React.ReactNode; ghost?: boolean }) {
@@ -199,6 +199,112 @@ function Index() {
         </div>
       </section>
 
+      {/* PLANOS E GRADE */}
+      <section id="planos-aulas" className="py-28">
+        <div className="mx-auto max-w-7xl px-5">
+          <Eyebrow>Planos, aulas e horários</Eyebrow>
+          <h2 className="font-display text-5xl sm:text-6xl">
+            Seu ritmo. <span className="text-primary">Seu plano.</span>
+          </h2>
+          <p className="mt-4 max-w-2xl text-muted-foreground">
+            Opções para treinar na Ribas Family e uma grade variada de modalidades para diferentes
+            objetivos.
+          </p>
+
+          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              [
+                "Mensal",
+                "R$ 100,00",
+                "1º mês: R$ 100,00 + R$ 50,00 de inscrição + R$ 50,00 de avaliação.",
+              ],
+              ["Trimestral", "R$ 90,00", "Mais taxas do cartão."],
+              ["Semestral", "R$ 85,00", "Mais taxas do cartão."],
+              ["Plano familiar", "R$ 90,00/pessoa", "A partir de 3 pessoas."],
+            ].map(([name, price, detail], i) => (
+              <article key={name} className="rounded-2xl glass p-6">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">{name}</p>
+                <p className="font-display mt-3 text-3xl sm:text-4xl">{price}</p>
+                <p className="mt-3 min-h-12 text-sm text-muted-foreground">{detail}</p>
+                {i === 0 && (
+                  <p className="mt-3 text-xs text-muted-foreground">
+                    Valores do primeiro mês conforme informado no cartaz.
+                  </p>
+                )}
+              </article>
+            ))}
+          </div>
+
+          <div className="mt-16 grid gap-10 lg:grid-cols-[1.4fr_0.8fr]">
+            <div>
+              <div className="flex items-center gap-3">
+                <CalendarDays className="h-7 w-7 text-primary" />
+                <h3 className="font-display text-3xl sm:text-4xl">Grade de atividades</h3>
+              </div>
+              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                {[
+                  ["Jiu-jítsu kids", "Segunda, quarta e sexta · 18h", "R$ 100,00"],
+                  ["Jiu-jítsu adulto", "Segunda e quarta · 20h; sexta · 18h", "R$ 100,00"],
+                  ["Muay Thai", "Segunda, quarta e sexta · 07h; terça e quinta · 19h", "R$ 100,00"],
+                  ["Boxe", "Terça e quinta · 07h", "R$ 80,00"],
+                  ["Boxe noite", "Segunda e quarta · 19h", "R$ 80,00"],
+                  ["Musculação", "Todos os dias, em todos os horários de funcionamento", null],
+                  [
+                    "Projeto social de judô",
+                    "Terça e quinta · 09h e 15h · aulas gratuitas",
+                    "Consultar secretaria",
+                  ],
+                  ["Projeto social de capoeira", "Sábado · 10h30", null],
+                ].map(([name, schedule, price]) => (
+                  <article key={name} className="rounded-xl glass p-5">
+                    <div className="flex flex-wrap items-start justify-between gap-2">
+                      <h4 className="font-extrabold">{name}</h4>
+                      {price && <span className="text-sm font-bold text-primary">{price}</span>}
+                    </div>
+                    <p className="mt-2 text-sm text-muted-foreground">{schedule}</p>
+                  </article>
+                ))}
+              </div>
+            </div>
+
+            <aside className="h-fit rounded-3xl glass p-7 sm:p-8">
+              <BadgePercent className="h-9 w-9 text-primary" />
+              <h3 className="font-display mt-5 text-3xl">Promoção</h3>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Combine atividades e aproveite os valores por pessoa:
+              </p>
+              <ul className="mt-5 divide-y divide-border">
+                <li className="flex justify-between gap-4 py-4">
+                  <span>2 atividades</span>
+                  <strong className="text-primary">R$ 130,00</strong>
+                </li>
+                <li className="flex justify-between gap-4 py-4">
+                  <span>3 atividades</span>
+                  <strong className="text-primary">R$ 150,00</strong>
+                </li>
+              </ul>
+              <p className="text-xs text-muted-foreground">
+                Consulte a secretaria sobre atividades incluídas, disponibilidade, condições e taxas
+                aplicáveis.
+              </p>
+              <a
+                href={WA}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-6 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-primary"
+              >
+                <MessageCircle className="h-4 w-4" />
+                Consultar no WhatsApp
+              </a>
+            </aside>
+          </div>
+          <p className="mt-8 text-xs text-muted-foreground">
+            Valores e grade reproduzidos conforme as informações fornecidas e sujeitos a alteração.
+            Confirme horários, vagas e condições com a secretaria.
+          </p>
+        </div>
+      </section>
+
       {/* LUTAS */}
       <section id="lutas" className="relative overflow-hidden py-28">
         <div className="mx-auto grid max-w-7xl gap-14 px-5 lg:grid-cols-2 lg:items-center">
@@ -270,7 +376,7 @@ function Index() {
             <Clock className="h-10 w-10 text-primary" />
             <h2 className="font-display mt-6 text-5xl">Horários</h2>
             <ul className="mt-8 divide-y divide-border">
-              {[["Segunda a sexta", "06h – 22h"], ["Sábado", "07h – 12h"], ["Domingo", "Fechado"]].map(([d, h]) => (
+              {[["Segunda a sexta", "06h – 22h"], ["Sábado e domingo", "07h – 12h"]].map(([d, h]) => (
                 <li key={d} className="flex justify-between py-4 text-lg"><span className="text-muted-foreground">{d}</span><span className="font-extrabold">{h}</span></li>
               ))}
             </ul>
