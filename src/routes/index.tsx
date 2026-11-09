@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Dumbbell, UserCheck, Swords, Activity, Star, MapPin, Clock, MessageCircle, Menu, X, Heart, TrendingUp, Users, Quote } from "lucide-react";
 import { useState, useEffect } from "react";
+import Lenis from "lenis";
 import hero from "@/assets/hero-gym.jpg";
 import fight from "@/assets/fight.jpg";
 import conditioning from "@/assets/conditioning.jpg";
@@ -46,13 +47,23 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 function Index() {
   const [open, setOpen] = useState(false);
   useEffect(() => {
+    const lenis = new Lenis({ duration: 1.3, easing: (t) => 1 - Math.pow(1 - t, 4), smoothWheel: true });
+    let raf = 0; const loop = (t: number) => { lenis.raf(t); raf = requestAnimationFrame(loop); }; raf = requestAnimationFrame(loop);
+    const onClick = (e: MouseEvent) => {
+      const a = (e.target as HTMLElement).closest('a[href^="#"]') as HTMLAnchorElement | null;
+      if (!a) return; const id = a.getAttribute("href")!; const el = id === "#topo" || id === "#" ? 0 : document.querySelector(id);
+      if (el === null) return; e.preventDefault(); setOpen(false);
+      lenis.scrollTo(el as HTMLElement | number, { offset: -72, duration: 1.6 }); history.replaceState(null, "", id);
+    };
+    document.addEventListener("click", onClick);
+    const cleanupLenis = () => { cancelAnimationFrame(raf); lenis.destroy(); document.removeEventListener("click", onClick); };
     const els = document.querySelectorAll("main section > div, section > div, [data-reveal]");
     els.forEach((el, i) => { el.classList.add("reveal"); (el as HTMLElement).style.transitionDelay = `${(i % 3) * 80}ms`; });
     const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: 0.12 });
     els.forEach((el) => io.observe(el));
     const onScroll = () => document.documentElement.style.setProperty("--scroll", String(Math.min(window.scrollY / (document.body.scrollHeight - innerHeight), 1)));
     onScroll(); window.addEventListener("scroll", onScroll, { passive: true });
-    return () => { io.disconnect(); window.removeEventListener("scroll", onScroll); };
+    return () => { cleanupLenis(); io.disconnect(); window.removeEventListener("scroll", onScroll); };
   }, []);
   return (
     <div className="ambient relative min-h-screen bg-background text-foreground">
