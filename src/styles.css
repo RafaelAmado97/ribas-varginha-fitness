@@ -180,3 +180,25 @@ section[id] { scroll-margin-top: 5rem; }
 @utility bg-brasil { background: var(--gradient-brasil); }
 @keyframes marquee { to { transform: translateX(-50%); } }
 @utility animate-marquee { animation: marquee 28s linear infinite; }
+
+/* Glass + ambient + reveal */
+@utility glass {
+  position: relative;
+  background: linear-gradient(145deg, color-mix(in oklab, var(--foreground) 7%, transparent), color-mix(in oklab, var(--foreground) 2%, transparent));
+  border: 1px solid color-mix(in oklab, var(--foreground) 11%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in oklab, var(--foreground) 12%, transparent), 0 20px 50px -25px oklch(0 0 0 / 0.7);
+  backdrop-filter: blur(18px) saturate(150%);
+  transition: transform .5s cubic-bezier(.2,.7,.2,1), border-color .4s, box-shadow .4s;
+  &:hover { border-color: color-mix(in oklab, var(--lime) 45%, transparent); box-shadow: inset 0 1px 0 color-mix(in oklab, var(--foreground) 16%, transparent), 0 25px 60px -25px color-mix(in oklab, var(--lime) 35%, transparent); }
+}
+@utility ambient {
+  isolation: isolate;
+  &::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background: radial-gradient(40vw 40vw at 85% 20%, color-mix(in oklab, var(--lime) 14%, transparent), transparent 70%), radial-gradient(35vw 35vw at 10% 75%, color-mix(in oklab, var(--gold) 10%, transparent), transparent 70%);
+    animation: drift 18s ease-in-out infinite alternate; }
+}
+@keyframes drift { to { transform: translate3d(-4%, 6%, 0) scale(1.1); } }
+.reveal { opacity: 0; transform: translateY(40px); filter: blur(6px); transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1), filter .9s; }
+.reveal.in { opacity: 1; transform: none; filter: none; }
+.scroll-bar { transform: scaleX(var(--scroll, 0)); }
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; filter: none; transition: none; } .ambient::before { animation: none; } }

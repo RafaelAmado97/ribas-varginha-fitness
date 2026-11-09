@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Dumbbell, UserCheck, Swords, Activity, Star, MapPin, Clock, MessageCircle, Menu, X, Heart, TrendingUp, Users, Quote } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import hero from "@/assets/hero-gym.jpg";
 import fight from "@/assets/fight.jpg";
 import conditioning from "@/assets/conditioning.jpg";
@@ -45,8 +45,18 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 
 function Index() {
   const [open, setOpen] = useState(false);
+  useEffect(() => {
+    const els = document.querySelectorAll("main section > div, section > div, [data-reveal]");
+    els.forEach((el, i) => { el.classList.add("reveal"); (el as HTMLElement).style.transitionDelay = `${(i % 3) * 80}ms`; });
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: 0.12 });
+    els.forEach((el) => io.observe(el));
+    const onScroll = () => document.documentElement.style.setProperty("--scroll", String(Math.min(window.scrollY / (document.body.scrollHeight - innerHeight), 1)));
+    onScroll(); window.addEventListener("scroll", onScroll, { passive: true });
+    return () => { io.disconnect(); window.removeEventListener("scroll", onScroll); };
+  }, []);
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="ambient relative min-h-screen bg-background text-foreground">
+      <div aria-hidden className="scroll-bar fixed left-0 top-0 z-[60] h-[3px] w-full origin-left bg-brasil" />
       {/* NAV */}
       <header className="sticky top-0 z-50 border-b border-border bg-graphite/85 backdrop-blur-lg">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5">
@@ -108,7 +118,7 @@ function Index() {
             ].map(([I, t, d]) => {
               const Icon = I as typeof Heart;
               return (
-                <div key={t as string} className="flex gap-5 rounded-2xl border border-border bg-card p-6 transition hover:border-primary/60">
+                <div key={t as string} className="flex gap-5 rounded-2xl glass p-6 transition hover:border-primary/60">
                   <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary"><Icon /></div>
                   <div><h3 className="text-xl font-extrabold">{t as string}</h3><p className="mt-1 text-muted-foreground">{d as string}</p></div>
                 </div>
@@ -132,7 +142,7 @@ function Index() {
             ].map(([I, t, d], n) => {
               const Icon = I as typeof Heart;
               return (
-                <div key={t as string} className="group relative overflow-hidden rounded-2xl border border-border bg-card p-8 transition hover:-translate-y-1 hover:border-primary">
+                <div key={t as string} className="group relative overflow-hidden rounded-2xl glass p-8 transition hover:-translate-y-1 hover:border-primary">
                   <span className="font-display absolute right-5 top-4 text-5xl text-foreground/5">0{n + 1}</span>
                   <Icon className="h-10 w-10 text-primary" />
                   <h3 className="font-display mt-8 text-3xl">{t as string}</h3>
@@ -171,7 +181,7 @@ function Index() {
           <Eyebrow>Galeria</Eyebrow>
           <h2 className="font-display text-5xl sm:text-6xl">Energia que <span className="text-primary">contagia</span></h2>
           <div className="mt-14 grid gap-4 md:grid-cols-3 md:grid-rows-2">
-            <div className="relative overflow-hidden rounded-2xl border-2 border-dashed border-primary/40 bg-card md:row-span-2">
+            <div className="relative overflow-hidden rounded-2xl glass border-dashed border-primary/40 md:row-span-2">
               <div className="flex h-full min-h-80 flex-col items-center justify-center gap-3 p-8 text-center">
                 <MapPin className="h-10 w-10 text-primary" />
                 <p className="font-display text-2xl">Fachada Ribas Family</p>
@@ -199,7 +209,7 @@ function Index() {
               ["Profissionais atenciosos", "Elogios recorrentes à orientação e ao cuidado durante os treinos."],
               ["Ambiente motivador", "Um espaço que dá vontade de voltar, com energia boa todos os dias."],
             ].map(([t, d]) => (
-              <div key={t} className="rounded-2xl border border-border bg-card p-8">
+              <div key={t} className="rounded-2xl glass p-8">
                 <Quote className="h-8 w-8 text-primary" />
                 <h3 className="mt-5 text-xl font-extrabold">{t}</h3>
                 <p className="mt-2 text-muted-foreground">{d}</p>
@@ -213,7 +223,7 @@ function Index() {
       {/* HORÁRIOS + LOCAL */}
       <section id="horarios" className="bg-graphite py-28">
         <div id="localizacao" className="mx-auto grid max-w-7xl gap-8 px-5 lg:grid-cols-2">
-          <div className="rounded-3xl border border-border bg-card p-10">
+          <div className="rounded-3xl glass p-10">
             <Clock className="h-10 w-10 text-primary" />
             <h2 className="font-display mt-6 text-5xl">Horários</h2>
             <ul className="mt-8 divide-y divide-border">
@@ -223,7 +233,7 @@ function Index() {
             </ul>
             <p className="mt-6 text-xs text-muted-foreground">Horários informativos e sujeitos a alteração. Confirme pelo WhatsApp.</p>
           </div>
-          <div className="flex flex-col overflow-hidden rounded-3xl border border-border bg-card">
+          <div className="flex flex-col overflow-hidden rounded-3xl glass">
             <iframe title="Mapa Ribas Family" src={MAPS_EMBED} loading="lazy" className="h-64 w-full grayscale invert-[.9]" />
             <div className="p-10">
               <h2 className="font-display text-5xl">Localização</h2>
