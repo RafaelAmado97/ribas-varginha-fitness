@@ -76,14 +76,14 @@ function Index() {
       e.preventDefault(); if (busy) return;
       const y = window.scrollY; const vh = innerHeight; const down = e.deltaY > 0;
       const list = sections(); const tops = list.map(topOf);
-      let i = tops.findIndex((t, k) => y >= t - 2 && (k === tops.length - 1 || y < tops[k + 1] - 2)); if (i < 0) i = 0;
-      const cur = list[i]; const bottom = tops[i] + cur.offsetHeight + (cur.id === "topo" ? 0 : OFF);
+      let i = tops.findIndex((t, k) => y >= t - 2 && (k === tops.length - 1 || y < tops[k + 1]! - 2)); if (i < 0) i = 0;
+      const cur = list[i]!; const bottom = tops[i]! + cur.offsetHeight + (cur.id === "topo" ? 0 : OFF);
       if (down) {
         if (bottom - (y + vh) > 40) animateTo(Math.min(y + vh * 0.85, bottom - vh), 800);
-        else if (i < list.length - 1) animateTo(tops[i + 1]);
+        else if (i < list.length - 1) animateTo(tops[i + 1]!);
       } else {
-        if (y - tops[i] > 40) animateTo(Math.max(y - vh * 0.85, tops[i]), 800);
-        else if (i > 0) { const pt = tops[i - 1]; const ph = list[i - 1].offsetHeight; animateTo(ph > vh ? Math.max(pt, tops[i] - vh) : pt); }
+        if (y - tops[i]! > 40) animateTo(Math.max(y - vh * 0.85, tops[i]!), 800);
+        else if (i > 0) { const pt = tops[i - 1]!; const ph = list[i - 1]!.offsetHeight; animateTo(ph > vh ? Math.max(pt, tops[i]! - vh) : pt); }
       }
     };
     document.addEventListener("click", onClick);
