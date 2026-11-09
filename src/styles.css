@@ -166,8 +166,6 @@
 }
 
 html { scroll-behavior: auto; }
-html.lenis, html.lenis body { height: auto; }
-.lenis.lenis-smooth { scroll-behavior: auto !important; }
 body { font-family: var(--font-sans); }
 section[id] { scroll-margin-top: 5rem; }
 
@@ -204,3 +202,5 @@ section[id] { scroll-margin-top: 5rem; }
 .reveal.in { opacity: 1; transform: none; filter: none; }
 .scroll-bar { transform: scaleX(var(--scroll, 0)); }
 @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; filter: none; transition: none; } .ambient::before { animation: none; } }
+html.is-sliding section[id] > div { transition: transform .9s cubic-bezier(.65,0,.35,1), opacity .9s; }
+html.is-sliding .reveal.in { transform: scale(.985); opacity: .85; }
