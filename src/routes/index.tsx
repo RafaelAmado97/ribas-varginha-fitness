@@ -235,7 +235,7 @@ function Index() {
       </section>
 
       {/* CTA */}
-      <section className="relative overflow-hidden py-32">
+      <section className="relative isolate overflow-hidden py-32">
         <div className="bg-brasil absolute inset-0 -z-10" />
         <div className="mx-auto max-w-4xl px-5 text-center text-primary-foreground">
           <h2 className="font-display text-5xl leading-none sm:text-7xl">Sua evolução começa com uma aula.</h2>
