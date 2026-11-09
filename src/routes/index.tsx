@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Dumbbell, UserCheck, Swords, Activity, Star, MapPin, Clock, MessageCircle, Menu, X, Heart, TrendingUp, Users, Quote } from "lucide-react";
 import { useState, useEffect } from "react";
-import Lenis from "lenis";
 import hero from "@/assets/hero-gym.jpg";
 import fight from "@/assets/fight.jpg";
 import conditioning from "@/assets/conditioning.jpg";
@@ -47,16 +46,49 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 function Index() {
   const [open, setOpen] = useState(false);
   useEffect(() => {
-    const lenis = new Lenis({ duration: 1.3, easing: (t) => 1 - Math.pow(1 - t, 4), smoothWheel: true });
-    let raf = 0; const loop = (t: number) => { lenis.raf(t); raf = requestAnimationFrame(loop); }; raf = requestAnimationFrame(loop);
+    const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+    let busy = false; let raf = 0;
+    const animateTo = (target: number, dur = 1100) => {
+      cancelAnimationFrame(raf); busy = true;
+      const start = window.scrollY; const max = document.documentElement.scrollHeight - innerHeight;
+      const end = Math.max(0, Math.min(target, max)); const t0 = performance.now();
+      document.documentElement.classList.add("is-sliding");
+      const step = (now: number) => {
+        const p = Math.min((now - t0) / dur, 1);
+        window.scrollTo(0, start + (end - start) * ease(p));
+        if (p < 1) raf = requestAnimationFrame(step);
+        else { setTimeout(() => { busy = false; }, 150); document.documentElement.classList.remove("is-sliding"); }
+      };
+      raf = requestAnimationFrame(step);
+    };
+    const OFF = 64;
+    const sections = () => Array.from(document.querySelectorAll<HTMLElement>("#topo, section[id], footer"));
+    const topOf = (el: HTMLElement) => el.getBoundingClientRect().top + window.scrollY - (el.id === "topo" ? 0 : OFF);
     const onClick = (e: MouseEvent) => {
       const a = (e.target as HTMLElement).closest('a[href^="#"]') as HTMLAnchorElement | null;
-      if (!a) return; const id = a.getAttribute("href")!; const el = id === "#topo" || id === "#" ? 0 : document.querySelector(id);
-      if (el === null) return; e.preventDefault(); setOpen(false);
-      lenis.scrollTo(el as HTMLElement | number, { offset: -72, duration: 1.6 }); history.replaceState(null, "", id);
+      if (!a) return; const id = a.getAttribute("href")!;
+      const el = id.length > 1 ? document.querySelector<HTMLElement>(id) : null;
+      e.preventDefault(); setOpen(false);
+      animateTo(el ? topOf(el) : 0, 1300); history.replaceState(null, "", id);
+    };
+    const onWheel = (e: WheelEvent) => {
+      if (window.innerWidth < 1024 || e.ctrlKey || Math.abs(e.deltaY) < 4) return;
+      e.preventDefault(); if (busy) return;
+      const y = window.scrollY; const vh = innerHeight; const down = e.deltaY > 0;
+      const list = sections(); const tops = list.map(topOf);
+      let i = tops.findIndex((t, k) => y >= t - 2 && (k === tops.length - 1 || y < tops[k + 1] - 2)); if (i < 0) i = 0;
+      const cur = list[i]; const bottom = tops[i] + cur.offsetHeight + (cur.id === "topo" ? 0 : OFF);
+      if (down) {
+        if (bottom - (y + vh) > 40) animateTo(Math.min(y + vh * 0.85, bottom - vh), 800);
+        else if (i < list.length - 1) animateTo(tops[i + 1]);
+      } else {
+        if (y - tops[i] > 40) animateTo(Math.max(y - vh * 0.85, tops[i]), 800);
+        else if (i > 0) { const pt = tops[i - 1]; const ph = list[i - 1].offsetHeight; animateTo(ph > vh ? Math.max(pt, tops[i] - vh) : pt); }
+      }
     };
     document.addEventListener("click", onClick);
-    const cleanupLenis = () => { cancelAnimationFrame(raf); lenis.destroy(); document.removeEventListener("click", onClick); };
+    window.addEventListener("wheel", onWheel, { passive: false });
+    const cleanupLenis = () => { cancelAnimationFrame(raf); document.removeEventListener("click", onClick); window.removeEventListener("wheel", onWheel); };
     const els = document.querySelectorAll("main section > div, section > div, [data-reveal]");
     els.forEach((el, i) => { el.classList.add("reveal"); (el as HTMLElement).style.transitionDelay = `${(i % 3) * 80}ms`; });
     const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: 0.12 });
